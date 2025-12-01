@@ -38,7 +38,7 @@ body{
   align-items: center;
 }
 
-#header h1, a{
+#header h1{
   margin: 20px;
   width: 5%;
 }
@@ -78,7 +78,7 @@ body{
   margin: 0 auto;
 }
 
-#content #error{
+#content #error, .error{
   color: red;
   font-size: small;
 }

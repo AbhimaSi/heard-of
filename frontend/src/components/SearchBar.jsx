@@ -2,6 +2,7 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import ListContext from '../contexts/List';
 import LoadContext from '../contexts/Loading';
 import ErrorContext from '../contexts/Error';
+import ContentContext from '../contexts/Content';
 import { TextField, FormControl, FormHelperText } from '@mui/material';
 
 const httpRequest = async(query) => {
@@ -38,6 +39,7 @@ const httpRequest = async(query) => {
 }
 
 function SearchBar(){
+    const { renderSearch, renderProfile } = useContext(ContentContext);
     const   [ input, setInput ] = useState(''),
             [ requisitionState, setRequisitionState ] = useState(null);
 
@@ -81,6 +83,7 @@ function SearchBar(){
     const keyDown = async (ev) => {
         if(ev.keyCode == 13){
             try{
+                renderSearch()
                 if (input.length == 0)
                     throw new Error("Input must include an artist name.")
                 else
