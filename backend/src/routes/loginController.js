@@ -5,13 +5,12 @@ const jwt = require('jsonwebtoken');
 const secret = 'SECRET';
 
 const loginController = async (req, res) => {
-    console.log(req.body)
     const { name, password } = req.body;
     const db = await getDB();
     const user = await db.collection('user').findOne({ name: name });
-    console.log(user)
+    console.log(req.cookies)
     if (!user) {
-        return res.status(404).json({error: 'User not found.'});
+        return res.status(404).json({ error: 'Invalid username.' });
     }
     if (user.password != password){
         return res.status(401).json({ error: 'Invalid password.' })
