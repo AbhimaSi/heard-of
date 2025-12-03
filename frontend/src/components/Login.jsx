@@ -31,7 +31,7 @@ function Login({ display }){
             if(!user.name || !user.password){
                 throw new Error('Required fields are empty.')
             }
-            let res = await fetch("http://localhost:3000/login", {
+            let res = await fetch("https://localhost:3000/login", {
                 method: 'POST',
                 headers: {
                     "content-type": "application/json"

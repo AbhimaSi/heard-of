@@ -45,17 +45,15 @@ function App() {
   }, []);
 
   const verifyToken = async () => {
-    const res = await fetch('http://localhost:3000/auth', {
+    const res = await fetch('https://localhost:3000/auth', {
       method: 'GET',
       credentials: 'include',
     })
     if(!res.ok){
       setAuth(false);
-      console.log('Unauthorized');
       return // unauthorized
     }
-    console.log('Authorized');
-    return setAuth(true);
+    return setAuth(true); // authorized
   }
   verifyToken();
 

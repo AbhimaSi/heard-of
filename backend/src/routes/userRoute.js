@@ -1,16 +1,21 @@
-const express = require('express')
-const userRouter = express.Router()
+const express = require('express');
+const userRouter = express.Router();
+const userSongsRouter = express.Router();
 //const { validationResult, body } = require('express-validator');
 //const bodyValidation = [body('user').notEmpty()]
-
 const path = require('path');
-const c = require(path.join(__dirname, './userController.js'));
-const { userAuth } = require(path.join(__dirname, './authController.js'))
+const control = require(path.join(__dirname, './userController.js'));
+const userAuth = require(path.join(__dirname, './authMiddleware.js'))
 
-userRouter.get('/', userAuth, c.getUserController);
-userRouter.post('/', c.postUserController);
-userRouter.delete('/', c.deleteUserController);
-userRouter.put('/', c.putUserController);
-userRouter.get('/', c.getUsersController);
+userRouter.get('/', userAuth, control.getUserController);
+userRouter.post('/', control.postUserController);
+userRouter.delete('/', control.deleteUserController);
+userRouter.put('/', control.putUserController);
+
+userSongsRouter.get('/', userAuth, control.getUserSongsController);
+userSongsRouter.post('/', userAuth, control.postUserSongController);
+userSongsRouter.delete('/', userAuth, control.deleteUserSongController);
+
+userRouter.use('/song', userSongsRouter);
 
 module.exports = userRouter;

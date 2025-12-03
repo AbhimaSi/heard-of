@@ -47,7 +47,7 @@ function UserProfile({ show }){
     const [ user, setUser ] = useState(undefined);
 
     const fetchUser = async () => {
-        const res = await fetch('http://localhost:3000/user', { method: 'GET', credentials: 'include' })
+        const res = await fetch('https://localhost:3000/user', { method: 'GET', credentials: 'include' })
         if (!res.ok){
             console.log('Failed to fetch.');
         }

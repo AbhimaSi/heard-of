@@ -10,7 +10,7 @@ function LikeButton({ song }) {
     const payload = { song: song }
 
     const addSong = async() => {
-        const res = await fetch('http://localhost:3000/song', {
+        const res = await fetch('https://localhost:3000/user/song', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -19,7 +19,7 @@ function LikeButton({ song }) {
         return res;
     }
     const removeSong = async() => {
-        const res = await fetch('http://localhost:3000/song', {
+        const res = await fetch('https://localhost:3000/user/song', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(song),
@@ -38,6 +38,7 @@ function LikeButton({ song }) {
             else{
                 res = await removeSong();
             }
+
             if (!res.ok){
                 throw new Error(res.Error);
             }

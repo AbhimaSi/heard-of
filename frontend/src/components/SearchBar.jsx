@@ -6,32 +6,22 @@ import ContentContext from '../contexts/Content';
 import { TextField, FormControl, FormHelperText } from '@mui/material';
 
 const httpRequest = async(query) => {
-    // QUERY Placeholder
-    const artista = query;
-    const musica = query;
-    const URI = "https://tastedive.com/api/similar"
-                +`?q=music:${encodeURI(query)}`
-                +"&type=music"
-                +"&info=1"
-                +"&limit=10"
-                +"&slimit=3"
-                +"&k=1060212-HeardOf-8673E0A3"
-    const proxy = "https://corsproxy.io/?url=";
     try{
-        /* Random Error Thrower
+        /* Error Thrower
         if(Math.random() >= 0.5){
             throw new Error('ForcedError.');
         }
         */
-        // HTTP REQUEST to DIVE API
-        const res = await fetch(proxy + encodeURI(URI));
-        if (res.ok){
-            const data = await res.json();
-            console.log(data);
-            return data.similar.results;
-        }
-        else
+
+        // HTTP REQUEST to BACKEND
+        console.log(query)
+        const res = await fetch(`https://localhost:3000/song/${query}`, { method: "GET" });
+        if (!res.ok){
             throw new Error(`Failed: ${res.status}. Error on trying to request from Proxy/API.`);
+        }
+
+        const data = await res.json();
+        return data;
     }
     catch(err){
         throw err;
@@ -85,7 +75,7 @@ function SearchBar(){
             try{
                 renderSearch()
                 if (input.length == 0)
-                    throw new Error("Input must include an artist name.")
+                    throw new Error("Input must include a song name.")
                 else
                     delError("SearchBarInput");
 
@@ -121,7 +111,7 @@ function SearchBar(){
                     variant="outlined" 
                     value={input} 
                     sx={input_sx} 
-                    placeholder="Type a musical artist. (e.g.: Anri, Draft Punk, Nirvana...)" 
+                    placeholder="Type a song name. (e.g.: Everlong, Like a Stone, Given Up...)" 
                     onChange={change} 
                     onKeyDown={keyDown} 
                 />
