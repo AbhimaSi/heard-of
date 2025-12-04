@@ -1,10 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 const express = require('express');
 const app = express();
 const https = require('https');
 const corsConfig = require(path.join(__dirname, './src/config/cors'));
+const { cache } = require(path.join(__dirname, 'src/config/redis-cache.js'));
 const connectMongoose = require(path.join(__dirname, './src/config/mongoose'));
 const initDB = require(path.join(__dirname, './src/config/initDB'));
 const userRouter = require(path.join(__dirname, './src/routes/userRoute'));
@@ -12,13 +14,13 @@ const loginRouter = require(path.join(__dirname, './src/routes/loginRoute'));
 const songRouter = require(path.join(__dirname, './src/routes/songRoute'));
 const authRouter = require(path.join(__dirname, './src/routes/authRoute'));
 
-const userAuth = require(path.join(__dirname, './src/routes/authMiddleware'));
-//const { cache } = require(path.join(__dirname, 'src/config/redis-cache.js'));
 
 (async () => await connectMongoose())();
 (async () => await initDB())();
 
-
+app.use(compression({
+    level: 6
+}));
 app.use(corsConfig())
 app.use(cookieParser());
 app.use(express.json());

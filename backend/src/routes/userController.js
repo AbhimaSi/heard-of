@@ -21,6 +21,7 @@ const getUsersController = async (req, res) => { // unused
 }
 
 const getUserController = async (req, res) => {
+    console.log('GET USER. cache register');
     const { user } = req.body;
     console.log(user)
     res.status(200).json(user)

@@ -36,7 +36,7 @@ const initializeDB = async () => {
         console.log('Database was setted sucessfuly.');
     }
     catch(err){
-        console.log(`Couldn't setup database. ${err}`);
+        console.log(`Couldn't setup database. ${err.message}`);
     }
 }
 

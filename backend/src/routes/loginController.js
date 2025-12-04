@@ -8,21 +8,25 @@ const secret = 'SECRET';
 const checkUser = async (name, password) => {
     const db = await getDB();
     const user = await db.collection('users').findOne({ name: name });
-    if (!user) {
-        throw new Error('Invalid username.');
+    try{
+        if (!user) {
+            throw new Error('Invalid username.');
+        }
+        const correctPassword = await bcrypt.compare(password, user.password);
+        if (!correctPassword){
+            throw new Error('Invalid password.');
+        }
+        return correctPassword;
     }
-    const correctPassword = await bcrypt.compare(password, user.password);
-    if (!correctPassword){
-        throw new Error('Invalid password.');
+    catch(err){
+        throw err;
     }
-    console.log(correctPassword)
-    return correctPassword;
 }
 
 const loginController = async (req, res) => {
     const { name, password } = req.body;
     try{
-        if (!checkUser(name, password)){
+        if (!(await checkUser(name, password))){
             throw new Error('Error on logging in.')
         }
 
@@ -35,7 +39,6 @@ const loginController = async (req, res) => {
         res.status(200).json({ message: 'Logged in sucessfully.', token: token })
     }
     catch(err){
-        console.log(err);
         res.status(400).json({ error: err });
     }
 

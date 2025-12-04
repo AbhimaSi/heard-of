@@ -15,7 +15,7 @@ const getDB = async () => {
         await client.connect('db');
         db = client.db('db');
 
-        console.log('Connected to DB');
+        console.log('Connected to MongoDB.');
         
         return db;
     }

@@ -13,14 +13,26 @@ services:
       - "3000:3000"
     environment:
       - MONGODB_URL=mongodb://mongo:27017/db
+      - REDIS_HOST=redis
     depends_on:
       mongo:
         condition: service_healthy
+      redis:
+        condition: service_started
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://localhost:3000/"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  redis:
+    image: redis:8.4
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports: 
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
   mongo:
     image: mongo:8.2
@@ -38,3 +50,4 @@ services:
 
 volumes:
   mongo_data:
+  redis_data:

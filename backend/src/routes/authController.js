@@ -16,7 +16,7 @@ const authController = async (req, res) => {
     if (!user){
         return res.status(400).json({ error: 'Invalid token.' });
     }
-    res.status(200).json({ token: token })
+    return res.status(200).json({ token: token })
 }
 
 module.exports = authController;

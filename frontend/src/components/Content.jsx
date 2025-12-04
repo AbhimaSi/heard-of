@@ -46,7 +46,7 @@ import Profile from './Profile'
 function UserProfile({ show }){
     const [ user, setUser ] = useState(undefined);
 
-    const fetchUser = async () => {
+    const fetchUserSongs = async () => {
         const res = await fetch('https://localhost:3000/user', { method: 'GET', credentials: 'include' })
         if (!res.ok){
             console.log('Failed to fetch.');
@@ -57,8 +57,7 @@ function UserProfile({ show }){
     useEffect(()=>{
         const fetchUserData = async () => {
             try{
-                const user = await fetchUser();
-                console.log(user)
+                const user = await fetchUserSongs();
                 setUser(user);
             }
             catch(err){
