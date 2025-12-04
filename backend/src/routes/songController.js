@@ -1,9 +1,7 @@
 const path = require('path');
 const getDB = require(path.join(__dirname, '../config/mongodb'));
 const SongModel = require(path.join(__dirname, '../models/song'));
-
-
-// TODO: verify req body params at POSTs
+const { validationResult } = require('express-validator');
 
 const getSongsController = async(req, res) => {
     const db = await getDB()
@@ -30,6 +28,11 @@ const getSongsByNameController = async(req, res) => {
 const getSongController = async (req, res) => {
     const { name } = req.body
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid name." })
+    }
+
     const db = await getDB()
     const song = await db.collection('songs').findOne({ name: name });
 
@@ -43,6 +46,11 @@ const postSongController = async (req, res) => {
     try{
         const { yID, name } = req.body;
         console.log(yID, name)
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()){
+            return res.status(400).json({ error: "Invalid song data." })
+        }
 
         await SongModel.create({
             yID: yID,

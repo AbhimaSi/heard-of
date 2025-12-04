@@ -1,16 +1,16 @@
 const path = require('path');
 const getDB = require(path.join(__dirname, '../config/mongodb'));
 const UserModel = require(path.join(__dirname, '../models/user'));
-
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const hashPassword = async (password) => {
     const salt = 10;
     const hash = await bcrypt.hash(password, salt);
     return hash;
 } 
-//TODO VERIFY FIELDS
+
 // User
-const getUsersController = async (req, res) => { // unused
+const getUsersController = async (req, res) => {
     const db = await getDB();
     const users = await db.collection('users').find().toArray();
     if(!users){
@@ -21,7 +21,6 @@ const getUsersController = async (req, res) => { // unused
 }
 
 const getUserController = async (req, res) => {
-    console.log('GET USER. cache register');
     const { user } = req.body;
     console.log(user)
     res.status(200).json(user)
@@ -29,6 +28,10 @@ const getUserController = async (req, res) => {
 
 const postUserController = async (req, res) => {
     try{
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ error: "Invalid user." })
+        }
         const { name, password } = req.body;
         const hash = await hashPassword(password);
         const db = await getDB();
@@ -48,6 +51,10 @@ const postUserController = async (req, res) => {
 }
 
 const deleteUserController = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid name." })
+    }
     const {name} = req.body;
     const db = await getDB();
     const user = await db.collection('users').deleteOne({ name: name });
@@ -58,6 +65,10 @@ const deleteUserController = async (req, res) => {
 }
 
 const putUserController = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid user." })
+    }
     const {name, password} = req.body;
     const db = await getDB();
     const user = await db.collection('users').updateOne({ name: name }, { $set: { password: password }});
@@ -77,6 +88,10 @@ const getUserSongsController = async (req, res) => {
 }
 
 const postUserSongController = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid entries." })
+    }
     const newSong = req.body.song;
 
     const songs = req.body.user.songs ? req.body.user.songs : [];
@@ -104,6 +119,10 @@ const postUserSongController = async (req, res) => {
 }
 
 const deleteUserSongController = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid entries." })
+    }
     let { song } = req.body;
     const db = await getDB();
     song = await db.collection('users').updateOne({

@@ -2,6 +2,7 @@ const path = require('path');
 const getDB = require(path.join(__dirname, '../config/mongodb'));
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator')
 
 const secret = 'SECRET';
 
@@ -14,7 +15,7 @@ const checkUser = async (name, password) => {
         }
         const correctPassword = await bcrypt.compare(password, user.password);
         if (!correctPassword){
-            throw new Error('Invalid password.');
+            throw new Error('Incorrect password.');
         }
         return correctPassword;
     }
@@ -24,6 +25,11 @@ const checkUser = async (name, password) => {
 }
 
 const loginController = async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ error: "Invalid entries." })
+    }
+
     const { name, password } = req.body;
     try{
         if (!(await checkUser(name, password))){
